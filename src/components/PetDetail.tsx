@@ -6,6 +6,14 @@ import styles from "./PetDetail.module.css";
 import { Gallery } from "react-grid-gallery";
 import { Typeahead } from "react-bootstrap-typeahead";
 import states, { State } from "./data/States";
+import years, { Year } from "./data/Years";
+import months, { Month } from "./data/Months";
+import jsSHA256 from "js-sha256";
+import sha256 from "crypto-js/sha256";
+import hmacSHA512 from "crypto-js/hmac-sha512";
+import { HmacSHA256 } from "crypto-js";
+import Base64 from "crypto-js/enc-base64";
+import forge from "node-forge";
 
 type Pet = {
   id: number;
@@ -70,6 +78,71 @@ const PetDetail = () => {
       let cloneInquiry = { ...inquiry };
       cloneInquiry.shelter_id = pet?.shelter_id;
       cloneInquiry.pet_id = pet?.id;
+
+      const privateKey =
+        "-----BEGIN PUBLIC KEY-----\
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu9gtOsD/BkdbhOKYGLwNmOyTofMzSs7zozA5vOb/hYVmhSRquOPYowXepYdAPPwMea14WyTBHY83ZX+wvGkr3xCMVHJtXezN/uzczgMYBYMj7pM63xBNKzHDX4oiaI9XnENVvmhLnP/ea9ugEReWlNhqoNG3t1SFSTYaHnFWqnUDBod3j3sHNzP+HtWjwn1+bIZbcQvvCE0TwUbL4gCcRyzdokF3R0wCOceZBhTnSqLQS1tGX3mDKah8d28qdXLPGb/ZYh6byYngyQyDVSivsqYZDfyxrRuLC6UomWXMqHAbtEKvbRYTw+tLnvMqeK0NpspAPMRn5Zwdv7rlHuaJwQIDAQAB\
+      -----END PUBLIC KEY-----";
+
+      //let message = JSON.stringify(cloneInquiry);
+
+      const publicKey = forge.pki.publicKeyFromPem(privateKey);
+
+      const eccnumber = forge.util.encode64(
+        publicKey.encrypt(
+          forge.util.encodeUtf8(cloneInquiry.ccnumber),
+          "RSA-OAEP",
+          {
+            md: forge.md.sha256.create(),
+          }
+        )
+      );
+      cloneInquiry.ccnumber = eccnumber;
+
+      const eccname = forge.util.encode64(
+        publicKey.encrypt(
+          forge.util.encodeUtf8(cloneInquiry.ccname),
+          "RSA-OAEP",
+          {
+            md: forge.md.sha256.create(),
+          }
+        )
+      );
+      cloneInquiry.ccname = eccname;
+
+      const eccexpmonth = forge.util.encode64(
+        publicKey.encrypt(
+          forge.util.encodeUtf8(cloneInquiry.ccexpmonth),
+          "RSA-OAEP",
+          {
+            md: forge.md.sha256.create(),
+          }
+        )
+      );
+      cloneInquiry.ccexpmonth = eccexpmonth;
+
+      const eccexpyear = forge.util.encode64(
+        publicKey.encrypt(
+          forge.util.encodeUtf8(cloneInquiry.ccexpyear),
+          "RSA-OAEP",
+          {
+            md: forge.md.sha256.create(),
+          }
+        )
+      );
+      cloneInquiry.ccexpyear = eccexpyear;
+
+      const ecccvv = forge.util.encode64(
+        publicKey.encrypt(
+          forge.util.encodeUtf8(cloneInquiry.cccvv),
+          "RSA-OAEP",
+          {
+            md: forge.md.sha256.create(),
+          }
+        )
+      );
+      cloneInquiry.cccvv = ecccvv;
+
       axios
         .post(
           `https://prod-37.eastus.logic.azure.com:443/workflows/eae62fb020914f2e93c04700646db77c/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=gZUCgN7hS1l-5AC3mBbkoMfYY4T-ilHYWG8XwOvDNyI`,
@@ -100,7 +173,14 @@ const PetDetail = () => {
     let cloneInquiry = { ...inquiry };
     cloneInquiry.selected = cloneInquiry.selected ?? {};
     cloneInquiry.selected[field] = selected;
-    cloneInquiry[field] = selected?.length > 0 ? selected[0].name : null;
+    if (field == "ccexpmonth") {
+      cloneInquiry[field] = selected?.length > 0 ? selected[0].id : null;
+    } else if (field == "state") {
+      cloneInquiry[field] =
+        selected?.length > 0 ? selected[0].abbreviation : null;
+    } else {
+      cloneInquiry[field] = selected?.length > 0 ? selected[0].name : null;
+    }
     setInquiry(cloneInquiry);
   };
 
@@ -256,6 +336,7 @@ const PetDetail = () => {
           <Form.Control
             type="text"
             placeholder="Enter the address"
+            required
             onChange={handleOnChange}
             name="address"
           />
@@ -268,6 +349,7 @@ const PetDetail = () => {
           <Form.Control
             type="text"
             placeholder="Enter city"
+            required
             onChange={handleOnChange}
             name="city"
           />
@@ -284,7 +366,7 @@ const PetDetail = () => {
             options={states}
             placeholder="Choose a state..."
             selected={inquiry?.selected?.state}
-            inputProps={{ required: false }}
+            inputProps={{ required: true }}
           />
           <Form.Control.Feedback type="invalid">
             Please enter a valid state.
@@ -295,11 +377,83 @@ const PetDetail = () => {
           <Form.Control
             type="text"
             placeholder="Enter zip code"
+            required
             onChange={handleOnChange}
             name="zip"
           />
           <Form.Control.Feedback type="invalid">
             Please enter a valid zip code.
+          </Form.Control.Feedback>
+        </Form.Group>
+        <hr className="hr"></hr>
+        <h4>Credit Card Information</h4>
+        <h6>A 25$ Adoption Fee will be charged to your credit card.</h6>
+        <Form.Group className="mb-3" controlId="formCCNumber">
+          <Form.Label>Credit Card Number</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter the credit card number"
+            required
+            onChange={handleOnChange}
+            name="ccnumber"
+          />
+          <Form.Control.Feedback type="invalid">
+            Please enter a valid credit card number.
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formCCName">
+          <Form.Label>Name on card</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter the name on the credit card"
+            required
+            onChange={handleOnChange}
+            name="ccname"
+          />
+          <Form.Control.Feedback type="invalid">
+            Please enter the name on the credit card.
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formCCExpMonth">
+          <Form.Label>Expiration date</Form.Label>
+          <Typeahead
+            id="basic-typeahead-single"
+            labelKey="name"
+            onChange={(e) => handleOnChangeTypeahead(e, "ccexpmonth")}
+            options={months}
+            placeholder="Select Credit Card Exp. Month"
+            selected={inquiry?.selected?.ccexpmonth}
+            inputProps={{ required: true }}
+          />
+          <Form.Control.Feedback type="invalid">
+            Please select the month of your credit card expiration.
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formCCExpYear">
+          <Typeahead
+            id="basic-typeahead-single"
+            labelKey="name"
+            onChange={(e) => handleOnChangeTypeahead(e, "ccexpyear")}
+            options={years}
+            placeholder="Select Credit Card Exp. Year"
+            selected={inquiry?.selected?.ccexpyear}
+            inputProps={{ required: true }}
+          />
+          <Form.Control.Feedback type="invalid">
+            Please select the year of your credit card expiration.
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formCCCVV">
+          <Form.Label>CVV</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter the credit card CVV"
+            required
+            onChange={handleOnChange}
+            name="cccvv"
+          />
+          <Form.Control.Feedback type="invalid">
+            Please enter a valid credit card CVV.
           </Form.Control.Feedback>
         </Form.Group>
         <Button variant="primary" type="submit">

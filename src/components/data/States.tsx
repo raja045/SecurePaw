@@ -3,23 +3,24 @@ export interface State {
   population: number;
   capital: string;
   region: string;
+  abbreviation: string;
 }
 
 // prettier-ignore
 export default [
-    { name: 'Alabama', population: 4780127, capital: 'Montgomery', region: 'South' },
-    { name: 'Alaska', population: 710249, capital: 'Juneau', region: 'West' },
-    { name: 'Arizona', population: 6392307, capital: 'Phoenix', region: 'West' },
-    { name: 'Arkansas', population: 2915958, capital: 'Little Rock', region: 'South' },
-    { name: 'California', population: 37254503, capital: 'Sacramento', region: 'West' },
-    { name: 'Colorado', population: 5029324, capital: 'Denver', region: 'West' },
-    { name: 'Connecticut', population: 3574118, capital: 'Hartford', region: 'Northeast' },
-    { name: 'Delaware', population: 897936, capital: 'Dover', region: 'South' },
-    { name: 'Florida', population: 18804623, capital: 'Tallahassee', region: 'South' },
-    { name: 'Georgia', population: 9688681, capital: 'Atlanta', region: 'South' },
-    { name: 'Hawaii', population: 1360301, capital: 'Honolulu', region: 'West' },
-    { name: 'Idaho', population: 1567652, capital: 'Boise', region: 'West' },
-    { name: 'Illinois', population: 12831549, capital: 'Springfield', region: 'Midwest' },
+    { name: 'Alabama', population: 4780127, capital: 'Montgomery', region: 'South', abbreviation: 'FL'  },
+    { name: 'Alaska', population: 710249, capital: 'Juneau', region: 'West', abbreviation: 'FL'  },
+    { name: 'Arizona', population: 6392307, capital: 'Phoenix', region: 'West', abbreviation: 'FL'  },
+    { name: 'Arkansas', population: 2915958, capital: 'Little Rock', region: 'South', abbreviation: 'FL'  },
+    { name: 'California', population: 37254503, capital: 'Sacramento', region: 'West', abbreviation: 'FL'  },
+    { name: 'Colorado', population: 5029324, capital: 'Denver', region: 'West', abbreviation: 'FL'  },
+    { name: 'Connecticut', population: 3574118, capital: 'Hartford', region: 'Northeast', abbreviation: 'FL'  },
+    { name: 'Delaware', population: 897936, capital: 'Dover', region: 'South', abbreviation: 'FL'  },
+    { name: 'Florida', population: 18804623, capital: 'Tallahassee', region: 'South', abbreviation: 'FL' },
+    { name: 'Georgia', population: 9688681, capital: 'Atlanta', region: 'South', abbreviation: 'FL'  },
+    { name: 'Hawaii', population: 1360301, capital: 'Honolulu', region: 'West', abbreviation: 'FL'  },
+    { name: 'Idaho', population: 1567652, capital: 'Boise', region: 'West', abbreviation: 'FL'  },
+    { name: 'Illinois', population: 12831549, capital: 'Springfield', region: 'Midwest', abbreviation: 'FL'  },
     { name: 'Indiana', population: 6484229, capital: 'Indianapolis', region: 'Midwest' },
     { name: 'Iowa', population: 3046869, capital: 'Des Moines', region: 'Midwest' },
     { name: 'Kansas', population: 2853132, capital: 'Topeka', region: 'Midwest' },
