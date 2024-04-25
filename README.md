@@ -13,6 +13,36 @@ The Pet Adoption Platform is a user-friendly web-based application designed to s
 
 According to the American Psychiatric Association, "Among pet owners, a strong majority (86%) said their pets have a mostly positive impact on their mental health" (American Psychiatric Association, 2023). Our platform seeks to leverage this benefit by providing visibility into available pets and facilitating the adoption process.
 
+##Project Folder Structure 
+
+├── node_modules (.gitignore)
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   └── manifest.json
+├── src
+│   ├── assets
+│   │   │   ├── images
+│   │   │   └── logo.svg
+│   ├── constants
+│   │   └── data.js
+│   ├── components
+│   │   ├── app
+│   │   │   ├── App.css
+│   │   │   ├── App.jsx
+│   │   │   └── App.test.js
+│   │   └── index.js
+│   ├── utils
+│   │   ├── ...
+│   │   └── index.js
+│   ├── index.css
+│   ├── index.js
+│   ├── serviceWorker.js
+│   └── setupTests.js
+├── .gitignore
+├── package.json
+└── README.md
+
 ## Features
 
 - Browse available pets
