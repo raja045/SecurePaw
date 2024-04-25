@@ -13,8 +13,8 @@ The Pet Adoption Platform is a user-friendly web-based application designed to s
 
 According to the American Psychiatric Association, "Among pet owners, a strong majority (86%) said their pets have a mostly positive impact on their mental health" (American Psychiatric Association, 2023). Our platform seeks to leverage this benefit by providing visibility into available pets and facilitating the adoption process.
 
-##Project Folder Structure 
-
+## Project Folder Structure 
+```
 ├── node_modules (.gitignore)
 ├── public
 │   ├── favicon.ico
@@ -42,7 +42,7 @@ According to the American Psychiatric Association, "Among pet owners, a strong m
 ├── .gitignore
 ├── package.json
 └── README.md
-
+```
 ## Features
 
 - Browse available pets
