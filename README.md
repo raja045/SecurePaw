@@ -1,4 +1,4 @@
-# Pet Adoption Platform
+# SecurePaw(Pet Adoption Platform)
 
 ## Description
 
@@ -75,8 +75,4 @@ We welcome contributions from the community! If you'd like to contribute to the 
 3. Commit your changes: `git commit -am 'Add new feature'`
 4. Push to your branch: `git push origin feature-name`
 5. Submit a pull request
-
-## Contact
-
-For questions or inquiries about the Pet Adoption Platform, please contact Enio Maiale enio.maiale@gmail.com.
 
